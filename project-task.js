@@ -33,19 +33,31 @@ const readlineSync = require('readline-sync');
 let animals = [];
 let fees = [];
 function addAnimal(name, fee) {
-    if (!name || fee < 0) {
-        throw new Error("Invalid animal name or adoption fee!");
+    try {
+        if (!name || fee < 0) {
+            throw new Error("Invalid animal name or adoption fee!");
+        }
+    } catch (err) {
+        console.log(err.message, "Name MUST be a string & fee MUST be a positive number.");
     }
     animals.push(name);
     fees.push(fee);
 }
+
+//coded try and catch block WITHIN the function. Remember to close the try block BEFORE coding catch block. 
+
 function getAdoptionFee(animalName) {
     let index = animals.indexOf(animalName);
-    if (index === -1) {
-        throw new Error("Animal not found in records!");
+    try {
+        if (index === -1) {
+            throw new Error("Animal not found in records!");
+        }
+    } catch (err) {
+        console.log("Error detected: ", err.message);
     }
     return fees[index];
 }
+
 // Main program
 console.log("Welcome to the Pet Shelter System");
 while (true) {
@@ -74,10 +86,32 @@ Problems to Solve
 
 Invalid Input Errors:
   What happens if the user provides a negative adoption fee or leaves the name blank?
+
+  *Leaving name blank, program still runs. Inputting a negative number results in:
+
+    throw new Error("Invalid animal name or adoption fee!");
+        ^
+    Error: Invalid animal name or adoption fee!
+        at addAnimal (/Users/thunguyen/Desktop/launchcode/GitHub Repo/software-dev-course-exception-handling-1/project-task.js:37:15)
+        at Object.<anonymous>
+
   What happens if the user tries to find the fee for an animal that hasn’t been added?
+
+    Welcome to the Pet Shelter System
+    Choose an action: 'add', 'fee', or 'exit': fee
+    Enter the animal's name to find its adoption fee: luci
+    /Users/thunguyen/Desktop/launchcode/GitHub Repo/software-dev-course-exception-handling-1/project-task.js:45
+        throw new Error("Animal not found in records!");
+        ^
+
+    Error: Animal not found in records!
+        at getAdoptionFee (/Users/thunguyen/Desktop/launchcode/GitHub Repo/software-dev-course-exception-handling-1/project-task.js:45:15)
+        at Object.<anonymous>
 
 Code Flow Problems:
   What happens if the program throws an exception? Does the rest of the code continue running?
+    The program continues after the catch.
+    
 
 Structured Exception Handling:
   Add try/catch blocks to handle the above errors gracefully.
